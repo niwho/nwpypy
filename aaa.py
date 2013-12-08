@@ -3,7 +3,8 @@ __author__ = 'niwho'
 g_a = "%e6%a3%80%e7%b4%a2%3a%e4%b8%ad%e5%9b%bd"
 g_a = ["%e6%a3%80%e7%b4%a2%3a%e4%b8%ad%e5%9b%bd%e7%a7%91%e6%8a%80","%e4%b8%ad%e5%9b%bd%e7%a7%91%e6%8a%80",
        "%e4%b8%ad%e5%9b%bd%e7%a7%91%e6%8a%80","%e6%a3%80%e7%b4%a2%3a%e4%b8%ad%e5%9b%bd%e7%a7%91%e6%8a%80",
-       "%E5%88%97%E8%A1%A8%E6%96%B9%E5%BC%8F"]
+       "%E5%88%97%E8%A1%A8%E6%96%B9%E5%BC%8F"
+]
 '''
 http://epub.cnki.net/kns/oldnavi/n_list.aspx?NaviID=1&Field=cykm$%%22{0}%22&Value=%e4%b8%ad%e5%9b%bd%e7%a7%91%e6%8a%80&selectIndex=0&NaviLink=%e6%a3%80%e7%b4%a2%3a%e4%b8%ad%e5%9b%bd%e7%a7%91%e6%8a%80&ListSearchFlag=1&Flg=&DisplayMode=%E5%88%97%E8%A1%A8%E6%96%B9%E5%BC%8F
 
@@ -22,3 +23,4 @@ class Parser(object):
             print struct.pack("B"*a.__len__(),*a).decode("utf-8")
 pp = Parser("g_a")
 pp.doParse(*g_a)
+pp.doParse( "%E5%88%97%E8%A1%A8%E6%96%B9%E5%BC%8F")
