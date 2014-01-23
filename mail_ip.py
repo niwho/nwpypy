@@ -21,6 +21,7 @@ class mailnw(object):
     def __init__(self):
         #self.imap = imaplib.IMAP4_SSL("imap.126.com")
         self.nwf=False
+        self.from_mail = 'niwho@126.com'
     def login(self,user,pwd):
         self.imap.login(user, pwd)
     def getconnectoin(self):
@@ -53,8 +54,14 @@ class mailnw(object):
             else:
                 subject = encoding_subject
         #encoding_subject = subject[0][0]
-            print 'subject:%s'%(subject,)
-            if re.search('Subject:\s*(.*vnc.*)', subject):
+            #print 'subject:%s'%(subject,)
+            print type(subject)
+            print subject.split('\n')
+            mail_match = re.search('\w+@[\d\w]+(?:\.(?:com|cn|org))+',subject.split('\n')[0])
+            if mail_match:
+                self.from_mail = mail_match.group(0)
+                
+            if re.search('Subject:\s*(.*vxc.*)', subject):
                 self.nwf=True
                 print 'have found'
                 break
@@ -75,7 +82,7 @@ class mailnw(object):
             if self.nwf:
                 self.nwf=False
                 print 'mailOnce'
-		wip.mailOnce()
+		wip.mailOnce(self.from_mail)
         
 class IP_PARSE_ERROR(Exception):
     def __init__(self):
@@ -86,6 +93,7 @@ class WhatIP(object):
         self.preipinfo ='-1'
     
         self.ipinfo = '0'
+        self.mail_to = 'niwho@126.com'
     def getInnerIP(self):
         """
         Returns the actual ip of the local machine.
@@ -133,7 +141,7 @@ class WhatIP(object):
         mail_server = 'smtp.126.com'
         mail_port = 25
         mail_user =  'alladinfo@126.com'
-        send_to = 'niwho@126.com'
+        send_to = self.mail_to#'niwho@126.com'
         try:
             smtp_client = smtplib.SMTP(mail_server,mail_port)
             smtp_client.login('alladinfo@126.com','ADINFO')  
@@ -169,7 +177,7 @@ class WhatIP(object):
             self.mailIP()
 	    obmail.runOnce(self)		
             time.sleep(1)
-    def mailOnce(self):
+    def mailOnce(self,mailto='niwho@126.com'):
 	try:
             self.getIPInfo()#可能会有异常
         except IP_PARSE_ERROR,what:
@@ -177,6 +185,8 @@ class WhatIP(object):
         except Exception, what:
             print what 
         #无异常则发送邮件
+        self.mail_to=mailto
+        print mailto
         self.mailIP(False)
           
 
