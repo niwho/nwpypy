@@ -45,6 +45,23 @@ class MyDropBox(object):
         jn = json.loads(r.text)
         return jn
     
+    def uploadFile2(self,f,filepath='how-to-download-large-file-in-python-with-requests-py'):
+        paths = []
+        for pt in filepath.split('/'):
+            paths.extend(pt.split('\\'))
+        filename=paths[-1]
+        url = 'https://api-content.dropbox.com/1/files_put/dropbox/essy/%s'%(filename,)
+        params = {'access_token':self.getAccessToken()}
+        data = open(filepath,'rb')
+        data.seek(0,2)
+        filesize = data.tell()
+        data.seek(0,0)
+        headers = {'Content-Length':filesize}
+        r = requests.post(url,params =params ,data=data,headers=headers,verify=False)
+        self.logger2.info(r.text)
+        jn = json.loads(r.text)
+        return jn
+    
     def shareFile(self,filepath='how-to-download-large-file-in-python-with-requests-py'):
         url = 'https://api.dropbox.com/1/shares/dropbox/essy/%s'%(filepath,)    
         params = {'access_token':self.getAccessToken(),'short_url':True}
@@ -64,8 +81,8 @@ class MyDropBox(object):
         jn = json.loads(r.text)
         return jn
     
-    def metadata(self,filename='niwho'):
-        url = 'https://api.weipan.cn/2/metadata/sandbox/%s'%(filename,)    
+    def metadata(self,path='/essy/how-to-download-large-file-in-python-with-requests-py'):
+        url = 'https://api.dropbox.com/1/metadata/dropbox/%s'%(path,)    
         params = {'access_token':self.getAccessToken()}
         r = requests.get(url,params =params,verify=False)
         self.logger2.info(r.url)
@@ -73,7 +90,9 @@ class MyDropBox(object):
         jn = json.loads(r.text)
         return jn
 
-mdb = MyDropBox()
-#print mdb.uploadFile()
-print mdb.shareFile()
+if __name__ == '__main__':
+    mdb = MyDropBox()
+    #print mdb.uploadFile()
+    print mdb.shareFile()
+    print mdb.metadata()
 
